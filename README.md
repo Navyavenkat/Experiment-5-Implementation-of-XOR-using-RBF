@@ -130,7 +130,7 @@ print(f"Input:{np.array([1, 1])}, Predicted: {predict_matrix(np.array([1, 1]), w
 
 ## OUTPUT :
 
-    
+    https://github.com/Navyavenkat/Experiment-5-Implementation-of-XOR-using-RBF/blob/main/nn.JPG?raw=true
 
 ## RESULT:
 
