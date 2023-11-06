@@ -31,20 +31,110 @@ The RBF of hidden neuron as gaussian function
 
 
 ## ALGORIHM:
-
-/** Write the Algorithm in steps**/
+# Step 1:
+    Define the XOR dataset with inputs and corresponding target outputs as shown earlier
+# Step 2:
+   Determine the number of RBF units you want to use in the hidden layer.Initialize the RBF centers and Gaussian widths (γ) either randomly or using a suitable method (e.g., K-means 
+   clustering).
+# Step 3:
+   Calculate the activations of each RBF unit for all the input data points using the Gaussian function:
+# Step 4:
+  Create a linear output layer that combines the activations of the RBF units to produce the final outputTrain the output layer using the computed RBF activations and the target output 
+  values.You can use linear regression, gradient descent, or other suitable methods for this purpose.
+# Step 5:
+  Define an error function (e.g., mean squared error) to measure the difference between the predicted and actual outputsUse an optimization algorithm (e.g., gradient descent) to 
+  minimize this error.Update the RBF center positions, Gaussian widths, and output layer weights iteratively to reduce the errorContinue training until the error converges to a 
+  satisfactory level.
+# Step 6:
+  Evaluate the performance of the RBF network on the test data by comparing the predicted outputs to the actual XOR values.
 
 ## PROGRAM:
+```
+ import numpy as np
+import matplotlib.pyplot as plt
+def gaussian_rbf(x, landmark, gamma=1):
+    return np.exp(-gamma * np.linalg.norm(x - landmark)**2)
+def end_to_end(X1, X2, ys, mu1, mu2):
+    from_1 = [gaussian_rbf(i, mu1) for i in zip(X1, X2)]
+    from_2 = [gaussian_rbf(i, mu2) for i in zip(X1, X2)]
+    # plot
+    
+    plt.figure(figsize=(13, 5))
+    plt.subplot(1, 2, 1)
+    plt.scatter((x1[0], x1[3]), (x2[0], x2[3]), label="Class_0")
+    plt.scatter((x1[1], x1[2]), (x2[1], x2[2]), label="Class_1")
+    plt.xlabel("$X1$", fontsize=15)
+    plt.ylabel("$X2$", fontsize=15)
+    plt.title("Xor: Linearly Inseparable", fontsize=15)
+    plt.legend()
 
 
+    plt.subplot(1, 2, 2)
+    plt.scatter(from_1[0], from_2[0], label="Class_0")
+    plt.scatter(from_1[1], from_2[1], label="Class_1")
+    plt.scatter(from_1[2], from_2[2], label="Class_1")
+    plt.scatter(from_1[3], from_2[3], label="Class_0")
+    plt.plot([0, 0.95], [0.95, 0], "k--")
+    plt.annotate("Seperating hyperplane", xy=(0.4, 0.55), xytext=(0.55, 0.66),
+                arrowprops=dict(facecolor='black', shrink=0.05))
+    plt.xlabel(f"$mu1$: {(mu1)}", fontsize=15)
+    plt.ylabel(f"$mu2$: {(mu2)}", fontsize=15)
+    plt.title("Transformed Inputs: Linearly Seperable", fontsize=15)
+    plt.legend()
+    # solving problem using matrices form
+    # AW = Y
+    A = []
+
+
+    for i, j in zip(from_1, from_2):
+        temp = []
+        temp.append(i)
+        temp.append(j)
+        temp.append(1)
+        A.append(temp)
+    
+    A = np.array(A)
+    W = np.linalg.inv(A.T.dot(A)).dot(A.T).dot(ys)
+    print(np.round(A.dot(W)))
+    print(ys)
+    print(f"Weights: {W}")
+    return W
+def predict_matrix(point, weights):
+    gaussian_rbf_0 = gaussian_rbf(np.array(point), mu1)
+    gaussian_rbf_1 = gaussian_rbf(np.array(point), mu2)
+    A = np.array([gaussian_rbf_0, gaussian_rbf_1, 1])
+    return np.round(A.dot(weights))
+# points
+x1 = np.array([0, 0, 1, 1])
+x2 = np.array([0, 1, 0, 1])
+ys = np.array([0, 1, 1, 0])
+
+
+# centers
+mu1 = np.array([0, 1])
+mu2 = np.array([1, 0])
+
+
+w = end_to_end(x1, x2, ys, mu1, mu2)
+
+
+# testing
+
+
+print(f"Input:{np.array([0, 0])}, Predicted: {predict_matrix(np.array([0, 0]), w)}")
+print(f"Input:{np.array([0, 1])}, Predicted: {predict_matrix(np.array([0, 1]), w)}")
+print(f"Input:{np.array([1, 0])}, Predicted: {predict_matrix(np.array([1, 0]), w)}")
+print(f"Input:{np.array([1, 1])}, Predicted: {predict_matrix(np.array([1, 1]), w)}")
+
+```
 
 ## OUTPUT :
-    /**PLOTS of Output in hidden space**/
-    /Classification results
+
+    ![nn](https://github.com/Navyavenkat/Experiment-5-Implementation-of-XOR-using-RBF/assets/94165327/d1c9ece4-d8f0-4733-aadc-494846020cb1)
 
 ## RESULT:
 
-
+  Hence the XOR using RBF is implemented.
 
 
 
